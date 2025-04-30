@@ -6,3 +6,4 @@ plotly
 yfinance
 textblob
 scikit-learn
+statsmodels
