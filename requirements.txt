@@ -10,4 +10,4 @@ statsmodels
 tensorflow
 cohere
 alpha_vantage
-alpha_vantage.exceptions
+
