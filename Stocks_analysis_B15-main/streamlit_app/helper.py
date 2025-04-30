@@ -45,7 +45,7 @@ def fetch_periods_intervals():
 
 def fetch_stock_info(stock_ticker):
     stock_data = yf.Ticker(stock_ticker)
-
+    time.sleep(5)
     stock_data_info = stock_data.info
 
     def safe_get(data_dict, key):
