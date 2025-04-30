@@ -56,11 +56,18 @@ response = co.generate(
     temperature=0.9
 )
 st.write(response.generations[0].text.strip())
+def show_dataframe(label, data, col):
+    df = pd.DataFrame({label: [data]})
+    
+    # Adjusting the width based on column type
+    if col in [col1, col2]:  # col1 and col2
+        width = 500
+    else:  # col3 or others
+        width = 300
+    
+    col.dataframe(df, hide_index=True, width=width)
 
-# Utility: Display info in columns
-def show_dataframe(label, value, col):
-    df = pd.DataFrame({label: [value]})
-    col.dataframe(df, hide_index=True, width=500 if col == col1 or col == col2 else 300)
+
 
 # Display Sections
 def render_section(title, fields, layout):
