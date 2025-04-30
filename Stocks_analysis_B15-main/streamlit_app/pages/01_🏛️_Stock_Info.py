@@ -64,21 +64,24 @@ def show_dataframe(label, data, col, width=300):
 
 
 # Display Sections
-def render_section(section_name, stock_data_info):
-    st.markdown(f"### **{section_name}**")
-    col1, col2 = st.columns(2)
-    col3 = st.empty()  # Add a third column, if necessary
+def render_section(label, stock_data_info):
+    if "Basic Information" in stock_data_info:
+        long_name = stock_data_info["Basic Information"].get("longName", "N/A")
+    else:
+        st.error("Basic Information not found in the stock data.")
+        long_name = "N/A"
 
-    # Example for rendering basic info:
-    show_dataframe("Issuer Name", stock_data_info["Basic Information"]["longName"], col1, width=500)
-    show_dataframe("Symbol", stock_ticker, col2, width=500)
-    # Continue for the other columns or sections
+    # Now display the data in the relevant section (assuming show_dataframe is your function for displaying data)
+    show_dataframe(label, long_name, col1, width=500)
 
-
-    # Continue for the other columns or sections
-
-# Display All Sections
+# Calling render_section with stock_data_info
 render_section("Basic Information", stock_data_info)
+
+    # Continue for the other columns or sections
+
+
+    # Continue for the other columns or sections
+
 
 
 render_section("Market Data",
