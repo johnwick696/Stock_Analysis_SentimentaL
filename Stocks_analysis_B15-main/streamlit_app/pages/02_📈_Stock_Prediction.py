@@ -4,6 +4,11 @@ import streamlit as st
 from helper import *
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.metrics import mean_squared_error
+import os
+
+css_path = os.path.join(os.path.dirname(__file__), "designing.css")
+with open(css_path) as source_des:
+    st.markdown(f"<style>{source_des.read()}</style>", unsafe_allow_html=True)
 
 st.set_page_config(
     page_title="Stock Price Prediction",
@@ -11,8 +16,6 @@ st.set_page_config(
 )
 
 
-with open("/Users/labuser/Documents/Stocks_analysis_B15-main/streamlit_app/designing.css") as source_des:
-    st.markdown(f'<style>{source_des.read()}</style>', unsafe_allow_html=True)
 
 
 st.markdown("""
