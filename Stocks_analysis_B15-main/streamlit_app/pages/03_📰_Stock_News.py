@@ -15,10 +15,21 @@ from bs4 import BeautifulSoup
 import sys
 import os
 
+st.set_page_config(
+    page_title="Stock News Analysis",
+    page_icon="📰",
+    layout="wide"
+)
 
+# Load CSS safely
+css_path = os.path.join(os.path.dirname(__file__), "../designing.css")
+if os.path.exists(css_path):
+    with open(css_path) as source_des:
+        st.markdown(f"<style>{source_des.read()}</style>", unsafe_allow_html=True)
+else:
+    st.warning("⚠️ designing.css not found")
 css_path = os.path.join(os.path.dirname(__file__), "designing.css")
-with open(css_path) as source_des:
-    st.markdown(f"<style>{source_des.read()}</style>", unsafe_allow_html=True)
+
 
 
 # Add the parent directory to the path to import helper functions
@@ -31,10 +42,7 @@ try:
 except LookupError:
     nltk.download('vader_lexicon')
 
-st.set_page_config(
-    page_title="Stock News Analysis",
-    page_icon="📰",
-)
+
 
 
 st.markdown("""
