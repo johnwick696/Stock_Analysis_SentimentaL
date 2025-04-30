@@ -5,7 +5,7 @@ st.set_page_config(
     page_icon="😎",
 )
 
-with open("designing.css") as source_des:
+with open("streamlit_app/designing.css") as source_des:
     st.markdown(f'<style>{source_des.read()}</style>', unsafe_allow_html=True)
 
 
