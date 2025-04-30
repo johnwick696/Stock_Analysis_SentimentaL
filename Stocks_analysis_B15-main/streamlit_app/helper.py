@@ -199,6 +199,12 @@ def fetch_stock_history(stock_ticker, period, interval):
     return stock_data_history
 
 '''
+
+
+
+
+
+'''
 import datetime as dt
 import numpy as np
 import tensorflow as tf
@@ -207,7 +213,7 @@ from sklearn.preprocessing import MinMaxScaler
 import yfinance as yf
 
 
-'''def generate_stock_prediction(stock_ticker):
+''''''def generate_stock_prediction(stock_ticker):
     try:
         # Fetch stock data
         stock_data = yf.Ticker(stock_ticker)
@@ -273,7 +279,7 @@ import yfinance as yf
     except Exception as e:
         print(f"Error: {e}")
         return None, None, None, None, None
-'''
+''''''
 
 import datetime as dt
 import yfinance as yf
@@ -368,4 +374,5 @@ def generate_stock_prediction(stock_ticker):
         print(f"Error: {e}")
         return None, None, None, None, None, None
 
+'''
 
