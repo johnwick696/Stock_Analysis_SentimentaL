@@ -8,3 +8,4 @@ textblob
 scikit-learn
 statsmodels
 tensorflow
+cohere
