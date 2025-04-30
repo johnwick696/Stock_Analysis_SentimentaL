@@ -10,7 +10,7 @@ import pandas as pd
 
 #import yfinance as yf
 from alpha_vantage.timeseries import TimeSeries
-from alpha_vantage.alpha_vantage_api import AlphaVantageException
+import requests
 
 from statsmodels.tsa.ar_model import AutoReg
 
@@ -19,7 +19,8 @@ import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
 from pathlib import Path
 
-api_key = 'ECP7NGZZHBIK99YH'
+
+ALPHA_VANTAGE_API_KEY = 'ECP7NGZZHBIK99YH'
 
 def fetch_stocks():
     csv_path = Path(__file__).resolve().parent / "../data/equity_issuers.csv"
@@ -47,68 +48,63 @@ def safe_get(data_dict, key):
     return data_dict.get(key, "N/A")
 
 # Fetch stock info from Alpha Vantage
-def fetch_stock_info(stock_ticker):
-    ts = TimeSeries(key=api_key, output_format='pandas')
-    
+def fetch_stock_history(stock_ticker, api_key=ALPHA_VANTAGE_API_KEY):
     try:
-        # Fetch the stock data info (e.g., daily data, metadata)
+        ts = TimeSeries(key=api_key, output_format='pandas')
         data, meta_data = ts.get_daily(symbol=stock_ticker, outputsize='compact')
+        data = data.rename(columns={
+            '1. open': 'Open',
+            '2. high': 'High',
+            '3. low': 'Low',
+            '4. close': 'Close'
+        })
+        return data[["Open", "High", "Low", "Close"]]
+    except Exception as e:
+        print("Error fetching stock history:", e)
+        return pd.DataFrame()
+
+
+def fetch_stock_info(stock_ticker, api_key=ALPHA_VANTAGE_API_KEY):
+    url = f"https://www.alphavantage.co/query?function=OVERVIEW&symbol={stock_ticker}&apikey={api_key}"
+    try:
+        response = requests.get(url)
+        data = response.json()
+
+        if "Symbol" not in data:
+            raise ValueError("Invalid symbol or data not found.")
+
+        def safe_get(key):
+            return data.get(key, "N/A")
 
         stock_data_info = {
             "Basic Information": {
-                "symbol": stock_ticker,
-                "longName": safe_get(meta_data, "2. Symbol"),
-                "currency": "USD",  # Alpha Vantage doesn't return currency directly, so assuming USD
-                "exchange": "N/A",  # No exchange info directly available in Alpha Vantage
+                "Symbol": safe_get("Symbol"),
+                "Name": safe_get("Name"),
+                "Currency": safe_get("Currency"),
+                "Exchange": safe_get("Exchange"),
+                "Sector": safe_get("Sector"),
+                "Industry": safe_get("Industry"),
             },
             "Market Data": {
-                "currentPrice": safe_get(data.iloc[-1], "4. close"),  # Using the last closing price
-                "previousClose": safe_get(data.iloc[-2], "4. close"),  # Previous day's close price
-                "open": safe_get(data.iloc[-1], "1. open"),
-                "dayLow": safe_get(data.iloc[-1], "3. low"),
-                "dayHigh": safe_get(data.iloc[-1], "2. high"),
-                "fiftyTwoWeekLow": "N/A",  # Alpha Vantage doesn't directly provide 52-week low
-                "fiftyTwoWeekHigh": "N/A",  # Alpha Vantage doesn't directly provide 52-week high
-                "fiftyDayAverage": "N/A",  # You can compute this if needed using rolling averages
-                "twoHundredDayAverage": "N/A",  # You can compute this if needed using rolling averages
-            },
-            "Volume and Shares": {
-                "volume": safe_get(data.iloc[-1], "5. volume"),
-                "regularMarketVolume": "N/A",  # Alpha Vantage doesn't provide regular market volume
-                "averageVolume": "N/A",  # Alpha Vantage doesn't provide average volume directly
-                "sharesOutstanding": "N/A",  # This data is not available from Alpha Vantage
-            },
-            # The rest of the sections could be adjusted similarly
+                "MarketCapitalization": safe_get("MarketCapitalization"),
+                "EBITDA": safe_get("EBITDA"),
+                "PERatio": safe_get("PERatio"),
+                "PEGRatio": safe_get("PEGRatio"),
+                "BookValue": safe_get("BookValue"),
+                "DividendPerShare": safe_get("DividendPerShare"),
+                "DividendYield": safe_get("DividendYield"),
+                "EPS": safe_get("EPS"),
+                "RevenueTTM": safe_get("RevenueTTM"),
+                "ProfitMargin": safe_get("ProfitMargin"),
+                "52WeekHigh": safe_get("52WeekHigh"),
+                "52WeekLow": safe_get("52WeekLow"),
+            }
         }
 
         return stock_data_info
-
     except Exception as e:
-        print(f"Error fetching stock info: {e}")
-        return None
-
-# Fetch stock history (OHLC) from Alpha Vantage
-def fetch_stock_history(stock_ticker, period='1d', interval='1min'):
-    ts = TimeSeries(key=api_key, output_format='pandas')
-    
-    try:
-        # Fetch historical stock data based on the requested interval
-        if interval in ['1min', '5min', '15min', '30min', '60min']:
-            data, meta_data = ts.get_intraday(symbol=stock_ticker, interval=interval, outputsize='full')
-        else:
-            data, meta_data = ts.get_daily(symbol=stock_ticker, outputsize='full')
-
-        # Filter columns to match the desired output (Open, High, Low, Close)
-        stock_data_history = data[['1. open', '2. high', '3. low', '4. close']]
-
-        # Rename columns to match the original format
-        stock_data_history.columns = ['Open', 'High', 'Low', 'Close']
-
-        return stock_data_history
-
-    except Exception as e:
-        print(f"Error fetching stock history: {e}")
-        return None
+        print("Error fetching stock info:", e)
+        return {}
 '''
 def fetch_stock_info(stock_ticker):
     stock_data = yf.Ticker(stock_ticker)
