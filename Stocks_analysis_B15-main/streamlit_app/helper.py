@@ -15,10 +15,13 @@ from statsmodels.tsa.ar_model import AutoReg
 import numpy as np
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
+from pathlib import Path
+
 
 
 def fetch_stocks():
-    df = pd.read_csv(Path("/Users/labuser/Documents/Stocks_analysis_B15-main/data/equity_issuers.csv"))
+    csv_path = Path(__file__).resolve().parent / "../data/equity_issuers.csv"
+    df = pd.read_csv(csv_path)
     df = df[["Security Code", "Issuer Name"]]
     stock_dict = dict(zip(df["Security Code"], df["Issuer Name"]))
     return stock_dict
