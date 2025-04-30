@@ -49,28 +49,42 @@ def safe_get(data_dict, key):
 
 # Fetch stock info from Alpha Vantage
 def fetch_stock_history(stock_ticker, api_key=ALPHA_VANTAGE_API_KEY):
+    """
+    Fetch daily stock price history using Alpha Vantage.
+
+    Returns:
+        pd.DataFrame: DataFrame with columns Open, High, Low, Close.
+    """
     try:
         ts = TimeSeries(key=api_key, output_format='pandas')
         data, meta_data = ts.get_daily(symbol=stock_ticker, outputsize='compact')
+
+        # Rename columns to standard format
         data = data.rename(columns={
             '1. open': 'Open',
             '2. high': 'High',
             '3. low': 'Low',
             '4. close': 'Close'
         })
+
         return data[["Open", "High", "Low", "Close"]]
     except Exception as e:
         print("Error fetching stock history:", e)
         return pd.DataFrame()
 
-
 def fetch_stock_info(stock_ticker, api_key=ALPHA_VANTAGE_API_KEY):
+    """
+    Fetch fundamental stock info using Alpha Vantage's OVERVIEW API.
+
+    Returns:
+        dict: Dictionary containing Basic Information and Market Data.
+    """
     url = f"https://www.alphavantage.co/query?function=OVERVIEW&symbol={stock_ticker}&apikey={api_key}"
     try:
         response = requests.get(url)
         data = response.json()
 
-        if "Symbol" not in data:
+        if "Symbol" not in data or not data.get("Name"):
             raise ValueError("Invalid symbol or data not found.")
 
         def safe_get(key):
@@ -102,6 +116,7 @@ def fetch_stock_info(stock_ticker, api_key=ALPHA_VANTAGE_API_KEY):
         }
 
         return stock_data_info
+
     except Exception as e:
         print("Error fetching stock info:", e)
         return {}
