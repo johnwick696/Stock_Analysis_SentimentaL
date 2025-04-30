@@ -3,19 +3,19 @@ from helper import *
 import cohere
 import os
 
-css_path = os.path.join(os.path.dirname(__file__), "../designing.css")
-
-# Check if file exists before loading
-if os.path.exists(css_path):
-    with open(css_path) as source_des:
-        st.markdown(f"<style>{source_des.read()}</style>", unsafe_allow_html=True)
-else:
-    st.warning("⚠️ CSS file not found: designing.css")
-
 st.set_page_config(
     page_title="Stock Info",
     page_icon="🏛️",
+    layout="wide"
 )
+
+# Now it's safe to load CSS or other Streamlit features
+css_path = os.path.join(os.path.dirname(__file__), "../designing.css")
+if os.path.exists(css_path):
+    with open(css_path) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+
 
 st.markdown("""
 <style>
