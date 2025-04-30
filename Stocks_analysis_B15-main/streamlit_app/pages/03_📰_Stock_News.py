@@ -15,6 +15,12 @@ from bs4 import BeautifulSoup
 import sys
 import os
 
+
+css_path = os.path.join(os.path.dirname(__file__), "designing.css")
+with open(css_path) as source_des:
+    st.markdown(f"<style>{source_des.read()}</style>", unsafe_allow_html=True)
+
+
 # Add the parent directory to the path to import helper functions
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from helper import *
@@ -30,8 +36,6 @@ st.set_page_config(
     page_icon="📰",
 )
 
-with open("/Users/labuser/Documents/Stocks_analysis_B15-main/streamlit_app/designing.css") as source_des:
-    st.markdown(f'<style>{source_des.read()}</style>', unsafe_allow_html=True)
 
 st.markdown("""
 <style>
