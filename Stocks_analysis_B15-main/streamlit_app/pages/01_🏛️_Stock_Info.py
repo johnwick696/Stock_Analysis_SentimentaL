@@ -72,14 +72,14 @@ def render_section(section_name, stock_data_info):
     # Example for rendering basic info:
     show_dataframe("Issuer Name", stock_data_info["Basic Information"]["longName"], col1, width=500)
     show_dataframe("Symbol", stock_ticker, col2, width=500)
+    # Continue for the other columns or sections
+
 
     # Continue for the other columns or sections
 
 # Display All Sections
-render_section("Basic Information", 
-    ["longName", "currency"],
-    [[("longName", "Issuer Name"), ("ticker", "Symbol")],
-     [("currency", "Currency"), ("exchange", "Exchange")]])
+render_section("Basic Information", stock_data_info)
+
 
 render_section("Market Data",
     [],
