@@ -10,7 +10,7 @@ import pandas as pd
 
 #import yfinance as yf
 from alpha_vantage.timeseries import TimeSeries
-from alpha_vantage.exceptions import AlphaVantageException
+from alpha_vantage.alpha_vantage_api import AlphaVantageException
 
 from statsmodels.tsa.ar_model import AutoReg
 
