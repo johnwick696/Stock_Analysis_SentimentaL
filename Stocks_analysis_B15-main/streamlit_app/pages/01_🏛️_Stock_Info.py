@@ -56,29 +56,24 @@ response = co.generate(
     temperature=0.9
 )
 st.write(response.generations[0].text.strip())
-def show_dataframe(label, data, col):
+def show_dataframe(label, data, col, width=300): 
     df = pd.DataFrame({label: [data]})
-    
-    # Adjusting the width based on column type
-    if col in [col1, col2]:  # col1 and col2
-        width = 500
-    else:  # col3 or others
-        width = 300
-    
     col.dataframe(df, hide_index=True, width=width)
 
 
 
+
 # Display Sections
-def render_section(title, fields, layout):
-    st.markdown(f"### **{title}**")
-    for group in layout:
-        cols = st.columns(len(group))
-        for (field_key, label), col in zip(group, cols):
-            try:
-                show_dataframe(label, stock_data_info[title][field_key], col)
-            except KeyError:
-                show_dataframe(label, "N/A", col)
+def render_section(section_name, stock_data_info):
+    st.markdown(f"### **{section_name}**")
+    col1, col2 = st.columns(2)
+    col3 = st.empty()  # Add a third column, if necessary
+
+    # Example for rendering basic info:
+    show_dataframe("Issuer Name", stock_data_info["Basic Information"]["longName"], col1, width=500)
+    show_dataframe("Symbol", stock_ticker, col2, width=500)
+
+    # Continue for the other columns or sections
 
 # Display All Sections
 render_section("Basic Information", 
