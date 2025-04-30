@@ -1,12 +1,18 @@
 import streamlit as st
+import os
 
 st.set_page_config(
     page_title="Stock Analysis App",
     page_icon="😎",
 )
 
-with open("streamlit_app/designing.css") as source_des:
-    st.markdown(f'<style>{source_des.read()}</style>', unsafe_allow_html=True)
+
+
+css_path = os.path.join(os.path.dirname(__file__), "designing.css")
+
+with open(css_path) as source_des:
+    st.markdown(f"<style>{source_des.read()}</style>", unsafe_allow_html=True)
+
 
 
 
