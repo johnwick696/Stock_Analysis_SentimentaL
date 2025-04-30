@@ -11,3 +11,4 @@ tensorflow
 cohere
 alpha_vantage
 requests
+yfinance
