@@ -9,4 +9,4 @@ scikit-learn
 statsmodels
 tensorflow
 cohere
-yfinance
+alpha_vintage
