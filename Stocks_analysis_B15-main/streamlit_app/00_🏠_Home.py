@@ -33,9 +33,9 @@ With our application, we aim to enhance your stock market insights by providing 
 """)
 st.markdown("## **Our Team**")
 st.markdown("""
-- Nimit Agarwal (E22CSEU0423)\n
+- Rachit Katyal (E22CSEU0432)\n
 - Shivansh Panday (E22CSEU1688)\n
-- Prabhat Thakur (E22CSEU0448)
+- Aakriti Mair (E22CSEU0443)
 """)
 st.markdown("## **Contributions**")
 st.markdown("""
